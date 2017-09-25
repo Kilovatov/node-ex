@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const {promisify} = require('util');
@@ -9,30 +7,20 @@ const readFileAsync = promisify(fs.readFile);
 
 
 class Importer {
-    constructor(dirwatcher, dir) {
-        dirwatcher.on('dirwatcher:changed', () => this.startImport(dir));
+    constructor(dirwatcher) {
+        dirwatcher.on('dirwatcher:changed', (dir) => this.startImport(dir));
     }
 
     startImport(dirPath) {
-        const files = [];
-        const self = this;
-        let data = [];
-        return readdirAsync(dirPath).then((list) => {
-            for (let item of list) {
-                if (path.extname(item) === '.csv') {
-                    files.push(item);
-                }
-            }
-            return files;
-        }).then(files => Promise.all(files.map(file =>
-            self.import(dirPath + '/' + file)
-                .then(jsonData => {
-                    data = data.concat(jsonData);
-                })
-        )))
-            .then(() => {
-                this.data = data;
-            })
+        return readdirAsync(dirPath)
+            .then(list => list.filter(item => path.extname(item) === '.csv'))
+            .then(files => Promise.all(files.map(file =>
+                this.import(dirPath + '/' + file)))
+                .then(jsonData => this.data = [...jsonData]
+                    .map(data => JSON.parse(data))
+                    .reduce((a,b) => a.concat(b))
+                )
+            )
             .catch((error) => {
                 console.error('data hasn\'t been updated: ' + error);
             });

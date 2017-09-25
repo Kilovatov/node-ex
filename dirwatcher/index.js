@@ -1,16 +1,14 @@
-'use strict';
-
 const EventEmitter = require('events');
+const chokidar = require('chokidar');
 
 class DirWatcher extends EventEmitter {
     watch(path, delay) {
-        const chokidar = require('chokidar');
-        var watcher = chokidar.watch(path, {
+        const watcher = chokidar.watch(path, {
             usePolling: true,
             interval: delay
         });
         watcher.on('all', () => {
-            this.emit('dirwatcher:changed');
+            this.emit('dirwatcher:changed', path);
         });
     }
 }

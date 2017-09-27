@@ -4,7 +4,7 @@
   "description": "training project",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sergei Kolevatov <sergei_kolevatov@epam.com>",
@@ -13,6 +13,9 @@
     "babel": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "babel-register": "^6.26.0"
+    "babel-register": "^6.26.0",
+    "chokidar": "^1.7.0",
+    "csvjson": "^4.3.4",
+    "nodemon": "^1.12.1"
   }
 }

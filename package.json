@@ -16,6 +16,10 @@
     "babel-register": "^6.26.0",
     "chokidar": "^1.7.0",
     "csvjson": "^4.3.4",
-    "nodemon": "^1.12.1"
+    "minimist": "^1.2.0",
+    "nodemon": "^1.12.1",
+    "request": "^2.83.0",
+    "split": "^1.0.1",
+    "through2": "^2.0.3"
   }
 }

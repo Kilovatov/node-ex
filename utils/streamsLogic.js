@@ -102,26 +102,36 @@ function printHowToUse() {
     printHelpMessage();
 }
 
-const runStream = function() {
+const runStream = function(...rest) {
     let actionName;
     let filePath;
     let dirPath;
 
-    if (arguments[0]) {
-        actionName = arguments[0].action;
-        filePath = arguments[0].file ? arguments[0].file : null;
-        dirPath = arguments[0].path ? arguments[0].path : null;
+    if (rest[0]) {
+        actionName = rest[0].action;
+        filePath = rest[0].file ? rest[0].file : null;
+        dirPath = rest[0].path ? rest[0].path : null;
 
     } else if (process.argv[2] === '--help' || process.argv[2] === '-h') {
         return printHelpMessage();
     } else {
-        let {action, file, help, a, f, h, path, p} = parseArgs(process.argv);
-        actionName = action ? action : a;
-        filePath = file ? file : f;
-        dirPath = path ? path: p;
-        if (!actionName) {
+        let {action, file, help, path} = parseArgs(process.argv, {
+            alias: {
+                a: 'action',
+                h: 'help',
+                f: 'file',
+                p: 'path'
+            }
+        });
+        if (!action) {
             return printHowToUse();
         }
+        if (help) {
+            printHelpMessage();
+        }
+        actionName = action;
+        filePath = file;
+        dirPath = path;
     }
 
     switch (actionName) {

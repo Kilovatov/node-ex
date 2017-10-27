@@ -1,10 +1,8 @@
-'use strict';
-
-const config = require('./config/config');
-const {User, Product} = require('./models');
-const {DirWatcher} = require('./dirwatcher');
-const {Importer} = require('./importer');
-const {StreamModule} = require('./utils/streamsModule');
+// const config = require('./config/config');
+// const {User, Product} = require('./models');
+// const {DirWatcher} = require('./dirwatcher');
+// const {Importer} = require('./importer');
+// const {StreamModule} = require('./utils/streamsModule');
 
 // console.log(config.name);
 //
@@ -17,8 +15,12 @@ const {StreamModule} = require('./utils/streamsModule');
 //setInterval(() => console.log(importer.data), 1000);
 // console.log(importer.importSync(dir+'/MOCK_DATA.csv'));
 
-const streamModule = new StreamModule();
-streamModule.run({
-    action: 'bundle-css',
-    path: __dirname + '/styles'
-});
+// const streamModule = new StreamModule();
+// streamModule.run({
+//     action: 'bundle-css',
+//     path: __dirname + '/styles'
+// });
+
+const {app} = require('./app');
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log(`App listening on port ${port}!`));

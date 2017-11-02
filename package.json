@@ -15,11 +15,16 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
     "chokidar": "^1.7.0",
+    "cookie": "^0.3.1",
     "csvjson": "^4.3.4",
     "minimist": "^1.2.0",
     "nodemon": "^1.12.1",
     "request": "^2.83.0",
     "split": "^1.0.1",
+    "stream-replace": "^1.0.0",
     "through2": "^2.0.3"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
   }
 }

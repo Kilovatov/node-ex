@@ -4,4 +4,4 @@ const parseQuery = (req, res, next) => {
     next();
 };
 
-exports.parseQuery = parseQuery;
+module.exports = parseQuery;

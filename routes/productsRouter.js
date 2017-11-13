@@ -1,17 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const {checkToken} = require('./../middlewares');
+const db = require('./../models');
 
+const isIdUnique =  (id) =>
+    db.Products.count({ where: { id: id } })
+        .then(count => count === 0);
 
-const productsRouter = (products) => {
     router.param('productId', function (req, res, next, id) {
-        req.product = products.filter(product => product.id == id)[0];
-        next();
+         db.Products.findById(id)
+            .then(product => {
+                req.product = product;
+                next();
+            });
     });
-    router.all('*', checkToken);
+    // router.all('*', checkToken);
 
     router.get('/', function (req, res) {
-        res.json(products);
+        db.Products
+            .findAll()
+            .then((products) =>
+                res.json(products)
+            );
     });
     router.get('/:productId', function (req, res) {
         res.json(req.product);
@@ -21,10 +31,14 @@ const productsRouter = (products) => {
     });
     router.post('/', function (req, res) {
         const product = req.body;
-        products.push(product);
-        res.json(product);
+        isIdUnique(product.id).then(unique => unique ? db.Products.create(product) : true)
+            .then(() => db.Products.findAll()
+                .then((products) =>
+                    res.json(products)
+                ));
     });
-    return router;
-};
 
-module.exports = productsRouter;
+
+
+
+module.exports = router;

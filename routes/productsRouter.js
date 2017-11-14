@@ -3,16 +3,16 @@ const router = express.Router();
 const {checkToken} = require('./../middlewares');
 const db = require('./../models');
 
-const isIdUnique =  (id) =>
-    db.Products.count({ where: { id: id } })
-        .then(count => count === 0);
-
     router.param('productId', function (req, res, next, id) {
          db.Products.findById(id)
             .then(product => {
                 req.product = product;
                 next();
-            });
+            })
+             .catch(er => {
+                 console.log('The error occurred: ' + er);
+                 res.status(500).send({ error: "Internal Error" });
+             });
     });
     // router.all('*', checkToken);
 
@@ -24,18 +24,29 @@ const isIdUnique =  (id) =>
             );
     });
     router.get('/:productId', function (req, res) {
-        res.json(req.product);
+        if (req.product) {
+            res.json(req.product)
+        }
+        res.status(404).send({ error: "Not found" });
     });
     router.get('/:productId/reviews', function (req, res) {
-        res.json(req.product.reviews)
+        if (req.product) {
+            res.json(req.product.reviews)
+        }
+        res.status(404).send({ error: "Not found" });
+
     });
     router.post('/', function (req, res) {
         const product = req.body;
-        isIdUnique(product.id).then(unique => unique ? db.Products.create(product) : true)
+        db.Products.create(product)
             .then(() => db.Products.findAll()
                 .then((products) =>
                     res.json(products)
-                ));
+                ))
+            .catch(er => {
+                console.log('The error occurred: ' + er);
+                res.status(500).send({ error: "Internal Error" });
+            });
     });
 
 

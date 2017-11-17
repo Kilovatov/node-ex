@@ -1,5 +1,5 @@
 // const config = require('./config/config');
-// const {User, Product} = require('./models');
+// const {User, Product} = require('./model');
 // const {DirWatcher} = require('./dirwatcher');
 // const {Importer} = require('./importer');
 // const {StreamModule} = require('./utils/streamsModule');

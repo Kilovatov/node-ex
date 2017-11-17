@@ -1,30 +1,55 @@
 const express = require('express');
 const router = express.Router();
 const {checkToken} = require('./../middlewares');
+const db = require('./../models');
 
-
-const productsRouter = (products) => {
     router.param('productId', function (req, res, next, id) {
-        req.product = products.filter(product => product.id == id)[0];
-        next();
+         db.Products.findById(id)
+            .then(product => {
+                req.product = product;
+                next();
+            })
+             .catch(er => {
+                 console.log('The error occurred: ' + er);
+                 res.status(500).send({ error: "Internal Error" });
+             });
     });
-    router.all('*', checkToken);
+    // router.all('*', checkToken);
 
     router.get('/', function (req, res) {
-        res.json(products);
+        db.Products
+            .findAll()
+            .then((products) =>
+                res.json(products)
+            );
     });
     router.get('/:productId', function (req, res) {
-        res.json(req.product);
+        if (req.product) {
+            res.json(req.product)
+        }
+        res.status(404).send({ error: "Not found" });
     });
     router.get('/:productId/reviews', function (req, res) {
-        res.json(req.product.reviews)
+        if (req.product) {
+            res.json(req.product.reviews)
+        }
+        res.status(404).send({ error: "Not found" });
+
     });
     router.post('/', function (req, res) {
         const product = req.body;
-        products.push(product);
-        res.json(product);
+        db.Products.create(product)
+            .then(() => db.Products.findAll()
+                .then((products) =>
+                    res.json(products)
+                ))
+            .catch(er => {
+                console.log('The error occurred: ' + er);
+                res.status(500).send({ error: "Internal Error" });
+            });
     });
-    return router;
-};
 
-module.exports = productsRouter;
+
+
+
+module.exports = router;

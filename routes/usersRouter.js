@@ -1,13 +1,57 @@
 const express = require('express');
 const router = express.Router();
-const {checkToken} = require('./../middlewares');
+const {UsersDB} = require('./../models');
 
-const usersRouter = (products) => {
-    router.all('*', checkToken);
-    router.get('/', function (req, res) {
-        res.json(products);
-    });
-    return router;
-};
+router.param('userId', function (req, res, next, id) {
+    UsersDB.find({id: id})
+        .then(user => {
+            req.user = user[0];
+            next();
+        })
+        .catch(er => {
+            console.log('The error occurred: ' + er);
+            res.status(500).send({ error: "Internal Error" });
+        });
+});
 
-module.exports = usersRouter;
+router.get('/', function (req, res) {
+    UsersDB
+        .find({})
+        .then((users) =>
+            res.json(users)
+        );
+});
+
+router.get('/:userId', function (req, res) {
+    if (req.user) {
+        res.json(req.user)
+    }
+    res.status(404).send({ error: "Not found" });
+});
+
+router.delete('/:userId', function (req, res) {
+    if (req.user) {
+        UsersDB.find(req.user).remove().exec();
+        res.json(req.user)
+    }
+    res.status(404).send({ error: "Not found" });
+});
+
+router.post('/', function (req, res) {
+    const user = req.body;
+    const userDocument = new UsersDB(user);
+    userDocument.save()
+        .then(() => UsersDB.find({})
+            .then((users) =>
+                res.json(users)
+            ))
+        .catch(er => {
+            console.log('The error occurred: ' + er);
+            res.status(500).send({ error: "Internal Error" });
+        });
+});
+
+
+
+
+module.exports = router;

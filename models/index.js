@@ -1,47 +1,38 @@
-const fs        = require('fs');
-const path      = require('path');
-const Sequelize = require('sequelize');
-const basename  = path.basename(__filename);
-const env       = process.env.NODE_ENV || 'development';
-const db        = {};
-const Product = require('../model/product');
+const City = require('./city');
+const Product = require('./product');
+const User = require('./user');
+const {DefaultProductsList, DefaultCitiesList, DefaultUsersList} = require('./../model');
 
+exports.User = User;
+exports.Product = Product;
+exports.City = City;
 
-const sequelize = new Sequelize('postgres', 'postgres', null, {
-  host: '192.168.99.100',
-  dialect: 'postgres',
-  port: '32772',
-
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
-});
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    var model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
+exports.fillModelsWithDefaultData = () => {
+  City.count((err, count) => {
+    if (!err && count === 0) {
+      const cities = new DefaultCitiesList();
+      for (let city of cities) {
+        const cityDocument = new City(city);
+        cityDocument.save(err => console.log(err));
+      }
+    }
   });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-const defaultProducts = new Product();
-db.Products.count().then(res => {
-  if (!res.length) {
-    db.Products.bulkCreate(defaultProducts);
-  }
-});
-
-
-module.exports = db;
+  Product.count((err, count) => {
+    if (!err && count === 0) {
+      const products = new DefaultProductsList();
+      for (let product of products) {
+        const productDocument = new Product(product);
+        productDocument.save();
+      }
+    }
+  });
+  User.count((err, count) => {
+    if (!err && count === 0) {
+      const users = new DefaultUsersList();
+      for (let user of users) {
+        const userDocument = new User(user);
+        userDocument.save();
+      }
+    }
+  });
+};

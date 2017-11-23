@@ -1,5 +1,7 @@
-const User = require('./user');
-const Product = require('./product');
+const DefaultUsersList = require('./user');
+const DefaultProductsList = require('./products');
+const DefaultCitiesList = require('./cities');
 
-exports.User = User;
-exports.Product = Product;
+exports.DefaultUsersList = DefaultUsersList;
+exports.DefaultProductsList = DefaultProductsList;
+exports.DefaultCitiesList = DefaultCitiesList;

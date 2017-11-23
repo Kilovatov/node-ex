@@ -1,4 +1,4 @@
-class Product {
+class DefaultProductsList {
     constructor () {
         return [
             {
@@ -23,4 +23,4 @@ class Product {
     }
 }
 
-module.exports = Product;
+module.exports = DefaultProductsList;

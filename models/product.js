@@ -16,4 +16,4 @@ const productSchema = new Schema({
         timestamps: {updatedAt: 'lastModifiedDate', createdAt: ''}
     });
 
-module.exports = productSchema;
+module.exports = mongoose.model('Products', productSchema);

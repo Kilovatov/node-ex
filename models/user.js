@@ -20,4 +20,4 @@ const userSchema = new Schema({
         timestamps: {updatedAt: 'lastModifiedDate', createdAt: ''}
     });
 
-module.exports = userSchema;
+module.exports = mongoose.model('Users', userSchema);

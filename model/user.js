@@ -1,4 +1,4 @@
-class User {
+class DefaultUsersList {
     constructor () {
         return [
             {
@@ -20,4 +20,4 @@ class User {
     }
 }
 
-module.exports = User;
+module.exports = DefaultUsersList;

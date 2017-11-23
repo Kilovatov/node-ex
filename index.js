@@ -20,7 +20,9 @@
 //     action: 'bundle-css',
 //     path: __dirname + '/styles'
 // });
-
-const {app} = require('./app');
+const mongoose = require('mongoose');
 const port = process.env.PORT || 8080;
+const {app} = require('./app');
+
+mongoose.connect('mongodb://localhost:27017/mydb', { useMongoClient: true });
 app.listen(port, () => console.log(`App listening on port ${port}!`));

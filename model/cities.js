@@ -1,4 +1,4 @@
-class Cities {
+class DefaultCitiesList {
     constructor () {
         return [
             {
@@ -44,4 +44,4 @@ class Cities {
     }
 }
 
-module.exports = Cities;
+module.exports = DefaultCitiesList;

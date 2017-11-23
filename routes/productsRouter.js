@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const {ProductsDB} = require('./../models');
+const {Product} = require('./../models');
 
 router.param('productId', function (req, res, next, id) {
-    ProductsDB.find({id: id})
+    Product.find({id: id})
         .then(product => {
             req.product = product[0];
             next();
@@ -15,7 +15,7 @@ router.param('productId', function (req, res, next, id) {
 });
 
 router.get('/', function (req, res) {
-    ProductsDB
+    Product
         .find({})
         .then((products) =>
             res.json(products)
@@ -36,16 +36,16 @@ router.get('/:productId/reviews', function (req, res) {
 });
 router.delete('/:productId', function (req, res) {
     if (req.product) {
-        ProductsDB.find(req.product).remove().exec();
+        Product.find(req.product).remove().exec();
         res.json(req.product)
     }
     res.status(404).send({error: "Not found"});
 });
 router.post('/', function (req, res) {
     const product = req.body;
-    const productDocument = new ProductsDB(product);
+    const productDocument = new Product(product);
     productDocument.save()
-        .then(() => ProductsDB.find({})
+        .then(() => Product.find({})
             .then((products) =>
                 res.json(products)
             ))

@@ -1,5 +1,7 @@
 const express = require('express');
 const {usersRouter, productsRouter, authRouter, citiesRouter} = require('./routes');
+const {fillModelsWithDefaultData} = require('./models');
+fillModelsWithDefaultData();
 
 const app = express();
 

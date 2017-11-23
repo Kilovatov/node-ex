@@ -36,4 +36,4 @@ const citySchema = new Schema({
         timestamps: {updatedAt: 'lastModifiedDate', createdAt: ''}
     });
 
-module.exports = citySchema;
+module.exports = mongoose.model('Cities', citySchema);
